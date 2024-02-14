@@ -1,0 +1,74 @@
+####################### Functions to update current values of C and F #########################
+
+function changeC(;C=nothing, method = "classic", H=nothing, popSize = nothing, mC = nothing)
+    if method == "classic"
+        return C
+    end
+    if (method == "L-SHADE") || (method == "SHADE")
+        r_i = rand(1:H, popSize)
+        cVals = Array{Float64}(undef, popSize)
+        for i in 1:popSize
+            cVals[i] = rand(Normal(mC[r_i[i]], .1), 1)[1]
+            if cVals[i] > 1
+                cVals[i] = 1
+            end
+            if cVals[i] < 0
+                cVals[i] = 0
+            end
+        end
+        return cVals
+    end
+    throw("Please input a valid method")
+end
+
+function changeF(;F=nothing, method = "classic", H=nothing, popSize = nothing, mF = nothing)
+    if method == "classic"
+        return F
+    end
+    if (method == "L-SHADE") || (method == "SHADE")
+        r_i = rand(1:H, popSize)
+        fVals = Array{Float64}(undef, popSize)
+        for i in 1:popSize
+            fVals[i] = rand(truncated(Cauchy(mF[r_i[i]], .1), lower = 0), 1)[1]
+            if fVals[i] > 1
+                fVals[i] = 1
+            end
+        end
+        return fVals
+    end
+    throw("Please input a valid method")
+end
+
+####################### Functions to update historic values of C and F #########################
+
+function updateMemC(;method = "classic", fDel = nothing, mC = nothing, sC = nothing, k = nothing)
+    if method == "classic"
+        return 0
+    end
+    if (method == "L-SHADE") || (method == "SHADE")
+        if isnothing(sC)
+            mC = mC[k]
+        else
+            w = fDel ./ sum(fDel)
+            mC = sum(sC .* w)
+        end
+        return(mC)
+    end
+    throw("Please input a valid method")
+end
+
+function updateMemF(;method = "classic", fDel = nothing, mF = nothing, sF = nothing, k = nothing)
+    if method == "classic"
+        return 0
+    end
+    if (method == "L-SHADE") || (method == "SHADE")
+        if isnothing(sF)
+            mF = mF[k]
+        else
+            w = fDel ./ sum(fDel)
+            mF = sum(sF.^2 .* w) / sum(sF .* w)
+        end
+        return(mF)
+    end
+    throw("Please input a valid method")
+end
