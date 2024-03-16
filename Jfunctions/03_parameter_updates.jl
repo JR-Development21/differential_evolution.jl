@@ -72,3 +72,11 @@ function updateMemF(;method = "classic", fDel = nothing, mF = nothing, sF = noth
     end
     throw("Please input a valid method")
 end
+
+function updateK(k, kMax)
+    if k == kMax
+        k = 1
+    else
+        k += 1
+    end
+end
