@@ -46,13 +46,13 @@ function updateMemC(;method = "classic", fDel = nothing, mC = nothing, sC = noth
         return 0
     end
     if (method == "L-SHADE") || (method == "SHADE")
-        if isnothing(sC)
-            mC = mC[k]
+        if length(sC) == 0
+            mC_new = mC[k]
         else
             w = fDel ./ sum(fDel)
-            mC = sum(sC .* w)
+            mC_new = sum(sC .* w)
         end
-        return(mC)
+        return(mC_new)
     end
     throw("Please input a valid method")
 end
@@ -62,13 +62,13 @@ function updateMemF(;method = "classic", fDel = nothing, mF = nothing, sF = noth
         return 0
     end
     if (method == "L-SHADE") || (method == "SHADE")
-        if isnothing(sF)
-            mF = mF[k]
+        if length(sF) == 0
+            mF_new = mF[k]
         else
             w = fDel ./ sum(fDel)
-            mF = sum(sF.^2 .* w) / sum(sF .* w)
+            mF_new = sum(sF.^2 .* w) / sum(sF .* w)
         end
-        return(mF)
+        return(mF_new)
     end
     throw("Please input a valid method")
 end
@@ -79,4 +79,5 @@ function updateK(k, kMax)
     else
         k += 1
     end
+    return k
 end
