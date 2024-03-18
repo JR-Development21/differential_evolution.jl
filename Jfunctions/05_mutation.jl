@@ -5,7 +5,7 @@ function mutateAgent(;iter, nAgents, agents, agentLength, fVal, cVal, testFunc, 
     lenPop = length(popInd)
     if doArchive
         K,n = size(agents)[[1,2]]
-        pop = Array{Float64}(undef, (n, K ,nArch))
+        pop = Array{Float64}(undef, (K, n ,nArch))
         for i in 1:lenPop
             if popInd[i] > nAgents
                 pop[:,:,i] = archive[:,:,popInd[i] - nAgents]
@@ -40,18 +40,18 @@ function mutateAgent(;iter, nAgents, agents, agentLength, fVal, cVal, testFunc, 
 
     if boundType == "absorbingWall"
         for j in 1:agentLength
-            if mutVec[j] < bounds[1][j]
-                mutVec[j] = bounds[1][j]
-            elseif mutvec[j] > bounds[2][j]
-                mutVec[j] = bounds[2][j]
+            if mutVec[j] < bounds[j][1]
+                mutVec[j] = bounds[j][1]
+            elseif mutVec[j] > bounds[j][2]
+                mutVec[j] = bounds[j][2]
             end
         end
     elseif boundType == "L-SHADE"
         for j in 1:agentLength
-            if mutVec[j] < bounds[1][j]
-                mutVec[j] = (bounds[1][j] + pop[1][j]) / 2
-            elseif mutvec[j] > bounds[2][j]
-                mutVec[j] = (bounds[2][j] + pop[1][j]) / 2
+            if mutVec[j] < bounds[j][1]
+                mutVec[j] = (bounds[j][1] + pop[:,:,1][j]) / 2
+            elseif mutVec[j] > bounds[j][2]
+                mutVec[j] = (bounds[j][2] + pop[:,:,1][j]) / 2
             end
         end
     end
