@@ -10,6 +10,8 @@ for i in 1:nf
     include(ftemp)
 end
 
+using Combinatorics
+
 ####################### MLE MVNormal ##############################
 d = 4
 bounds = easyBounds(d)

@@ -62,7 +62,7 @@ end
 
 function updateParams(;agents, fCurrent, mut, fMut, fDelMut, sC, sF, fDel, cVal, fVal, nAgents, doArchive = false, archive = nothing, nArch = nothing, method = "rand/1")
     for i in 1:nAgents
-        if fDelMut[i] <= 0
+        if fDelMut[i] < 0
             if occursin("current_to_pbest", method)
                 sC = vcat(sC, cVal[i])
                 sF = vcat(sF, fVal[i])

@@ -1,6 +1,6 @@
 ############### Function to run differential evolution ##################
 
-function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothing,nMin = 5, maxIters = 500, H = nothing, doArchive = false, archive = nothing, nArchive = nothing, method = "rand/1", variant = "classic", bounds = nothing, boundType = nothing, p = nothing)
+function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothing, nMin = 5, maxIters = 500, H = nothing, doArchive = false, archive = nothing, nArchive = nothing, method = "rand/1", variant = "classic", bounds = nothing, boundType = nothing, p = nothing)
     nAgents = size(agents)[3]
     nMax = deepcopy(nAgents)
     agentLength = length(agents[:,:,1])
