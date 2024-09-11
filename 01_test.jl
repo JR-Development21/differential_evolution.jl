@@ -77,3 +77,5 @@ out = differentialEvolution(deepcopy(agents), C, F, D_optim2, maxIters = 100, mF
 print(out[1])
 print("\n")
 print(out[2])
+print("\n")
+print(out[3])
