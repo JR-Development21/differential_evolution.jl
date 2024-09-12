@@ -1,5 +1,3 @@
-using LinearAlgebra
-
 function D_optim(mat; order = 2)
     size_mat = size(mat)
     if length(size_mat) > 1
@@ -136,6 +134,24 @@ function createModelMatrix(X, order::Int, N, K)
 
     return model_matrix
 end
+
+function DToBork(val, N, P)
+    (-val)^(1/P) * 100 / N
+end
+
+function IToBork(val)
+    1 / val
+end
+
+function AToBork(val, N, P)
+    100 * P / val / N
+end
+
+function GToBork(val, P)
+    100 * P / val
+end
+
+# using LinearAlgebra
 
 # test1 = [1;-1;0]
 
