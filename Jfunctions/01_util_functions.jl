@@ -22,7 +22,16 @@ function I_optim(mat; order = 2)
     X = createModelMatrix(mat, order, N, K)
     V = 2^K
     W = genW(K)
-    result = N * tr(W / (X' * X)) / V
+    XX = X'X
+    if det(XX) < sqrt(eps())
+        result = Inf
+    else
+        result = try
+            N * tr(W / XX) / V
+        catch e
+            Inf
+        end
+    end
     return(result)
 end
 
@@ -35,7 +44,16 @@ function A_optim(mat; order = 2)
     end
     N = size_mat[1]
     X = createModelMatrix(mat, order, N, K)
-    result = tr(inv((X' * X)))
+    XX = X'X
+    if det(XX) < sqrt(eps())
+        result = Inf
+    else
+        result = try
+            tr(inv(XX))
+        catch e
+            Inf
+        end
+    end
     return(result)
 end
 
@@ -48,19 +66,33 @@ function G_optim(mat; order = 2)
     end
     N = size_mat[1]
     X = createModelMatrix(mat, order, N, K)
-    X_inv = inv(X' * X)
-    base_vec = [[-1, -.5, 0, .5, 1] for i in 1:K]
-    base_tuples = vec(collect(Base.product(base_vec...)))
-    base_grid = covertToTuple(base_tuples)
-    base_grid = createModelMatrix(base_grid, order, 5^K, K)
-    max_track = -Inf
-    for i in 1:(5^K)
-        G_cand = N * base_grid[i,:]' * X_inv * base_grid[i,:]
-        if G_cand > max_track
-            max_track = copy(G_cand)
+    XX = X'X
+    if det(XX) < sqrt(eps())
+        result = Inf
+    else
+        X_inv = try
+            inv(XX)
+        catch e
+            "inverse failed"
+        end
+        if typeof(X_inv) == String
+            result = Inf
+        else
+            base_vec = [[-1, -.5, 0, .5, 1] for i in 1:K]
+            base_tuples = vec(collect(Base.product(base_vec...)))
+            base_grid = covertToTuple(base_tuples)
+            base_grid = createModelMatrix(base_grid, order, 5^K, K)
+            max_track = -Inf
+            for i in 1:(5^K)
+                G_cand = N * base_grid[i,:]' * X_inv * base_grid[i,:]
+                if G_cand > max_track
+                    max_track = copy(G_cand)
+                end
+            end
+            result = max_track
         end
     end
-    return max_track
+    return result
 end
 
 function genW(K)

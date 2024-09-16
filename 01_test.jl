@@ -50,15 +50,15 @@ bounds = [[-1, 1] for i in 1:nAgents]
 
 ########################## D-optimal ###############################
 
-K = 3
-N = 8
+K = 1
+N = 3
 d = K * N
 bounds = easyBounds(K)
 nAgents = numAgents(d)
 agents = initializeAgents(nAgents, N, K, bounds)
 C = .8
 F = .7
-nArchive = Int(numAgents(d)/4)
+nArchive = Int(floor(numAgents(d)/4))
 archive = initializeAgents(nArchive, N, K, bounds)
 bounds = [[-1, 1] for i in 1:d]
 
@@ -73,9 +73,17 @@ H = d * 2
 mF = [.7 for x in 1:H]
 mC = [.8 for x in 1:H]
 
-out = differentialEvolution(deepcopy(agents), C, F, D_optim2, maxIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .1, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, G_optim, maxIters = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .05, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
 print(out[1])
 print("\n")
 print(out[2])
+print("\n")
+print(DToBork(D_optim(out[1]), N, Int(2 * K + K * (K - 1) / 2 + 1)))
+print("\n")
+print(IToBork(I_optim(out[1])))
+print("\n")
+print(AToBork(A_optim(out[1]), N, Int(2 * K + K * (K - 1) / 2 + 1)))
+print("\n")
+print(GToBork(G_optim(out[1]), Int(2 * K + K * (K - 1) / 2 + 1)))
 print("\n")
 print(out[3])
