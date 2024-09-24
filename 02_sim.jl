@@ -6,7 +6,7 @@ nprocs()      # Number of available processes.
 nworkers()
 
 #
-addprocs(length(Sys.cpu_info()) - 1)
+addprocs(min(length(Sys.cpu_info()) - 1, 30))
 nprocs()
 nworkers()
 
@@ -23,14 +23,16 @@ nworkers()
 
 
     # Random.seed!(16)
-    nRuns = 21
-    nReps = 20
+    nReps = 2
 
     ## set up  combinatoric runs by factor numAgents
     nVec = vcat(3:9, 6:12, 10:16)
     kVec = repeat(1:3, inner = 7)
-    critVec = [D_optim, A_optim, G_optim, I_optim]
-    totalRuns = nRuns * nReps
+    agentVec = [50, 150, 500]
+    nRuns = length(kVec)
+    nSize = length(agentVec)
+    critVec = [D_criterion, A_criterion, G_criterion, I_criterion]
+    totalRuns = nRuns * nReps * nSize
     DVec = Array{Float64}(undef, totalRuns, 6)
     AVec = Array{Float64}(undef, totalRuns, 6)
     GVec = Array{Float64}(undef, totalRuns, 6)
@@ -42,14 +44,14 @@ nworkers()
     IDesign = Array{Array{Float64}}(undef, totalRuns)
 
 
-    function run_optimization(i, j, k)
+    function run_optimization(i, j, k, l)
         K = kVec[i]
         N = nVec[i]
         d = K * N
         bounds = easyBounds(K)
-        nAgents = numAgents(d)
+        nAgents = agentVec[l]
         agents = initializeAgents(nAgents, N, K, bounds)
-        nArchive = Int(floor(numAgents(d) / 4))
+        nArchive = Int(floor(nAgents / 4))
         archive = initializeAgents(nArchive, N, K, bounds)
         bounds = [[-1, 1] for i in 1:d]
         C = [.8 for x in 1:nAgents]
@@ -57,27 +59,28 @@ nworkers()
         H = d * 2
         mF = [.7 for x in 1:H]
         mC = [.8 for x in 1:H]
+        crit = x -> critVec[k](x; N = N, K = K)
 
-        out = differentialEvolution(deepcopy(agents), C, F, critVec[k], maxIters = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .05, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxIters = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .05, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
 
         if k == 1
-            critVal = DToBork(D_optim(out[1]), N, Int(2 * K + K * (K - 1) / 2 + 1))
-            return (:D, j + nReps * (i - 1), [j, K, N, out[3], nAgents, critVal], out[1])
+            critVal = D_criterion(out[1]; N = N, K = K)
+            return (:D, j + nReps * nSize * (i - 1) + nReps * (l - 1), [j, K, N, out[3], nAgents, critVal], out[1])
         elseif k == 2
-            critVal = AToBork(A_optim(out[1]), N, Int(2 * K + K * (K - 1) / 2 + 1))
-            return (:A, j + nReps * (i - 1), [j, K, N, out[3], nAgents, critVal], out[1])
+            critVal = A_criterion(out[1]; N = N, K = K)
+            return (:A, j + nReps * nSize * (i - 1) + nReps * (l - 1), [j, K, N, out[3], nAgents, critVal], out[1])
         elseif k == 3
-            critVal = GToBork(G_optim(out[1]), Int(2 * K + K * (K - 1) / 2 + 1))
-            return (:G, j + nReps * (i - 1), [j, K, N, out[3], nAgents, critVal], out[1])
+            critVal = G_criterion(out[1]; N = N, K = K)
+            return (:G, j + nReps * nSize * (i - 1) + nReps * (l - 1), [j, K, N, out[3], nAgents, critVal], out[1])
         else
-            critVal = IToBork(I_optim(out[1]))
-            return (:I, j + nReps * (i - 1), [j, K, N, out[3], nAgents, critVal], out[1])
+            critVal = I_criterion(out[1]; N = N, K = K)
+            return (:I, j + nReps * nSize * (i - 1) + nReps * (l - 1), [j, K, N, out[3], nAgents, critVal], out[1])
         end
     end
 end
 
 ## Use pmap to parallelize the optimization runs
-results = pmap(x -> run_optimization(x[1], x[2], x[3]), [(i, j, k) for i in 1:nRuns for j in 1:nReps for k in 1:4])
+results = pmap(x -> run_optimization(x[1], x[2], x[3], x[4]), [(i, j, k, l) for i in 1:nRuns for j in 1:nReps for k in 1:4 for l in 1:nSize])
 
 ## Store the results in the respective matrices
 for res in results

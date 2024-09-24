@@ -1,4 +1,4 @@
-function D_criterion(X; N = N, K = K, order)
+function D_criterion(X; N = N, K = K, order=2)
     Xm          = genModelMat_fac(X; N = N, K = K, order = order)
     msize       = size(Xm)
     #N           = msize[1]
@@ -9,7 +9,7 @@ function D_criterion(X; N = N, K = K, order)
     if rank(XpX) < p
         result = -Inf
     else
-        result = (determinant)^(1/p)
+        result = 100 * (determinant)^(1/p) / N
     end
 
     result = -result
@@ -19,13 +19,12 @@ end
 
 
 ## A criterion -----------------------------------------------------------------
-function A_criterion(X; N = N, K = K,order)
+function A_criterion(X; N = N, K = K,order=2)
     Xm          = genModelMat_fac(X; N = N, K = K, order = order)
     msize       = size(Xm)
     #N           = msize[1]
     p           = msize[2]
     XpX         = transpose(Xm)*Xm
-    determinant = det(XpX)
 
     if rank(XpX) < p
         result = -Inf
@@ -41,7 +40,7 @@ end
 
 
 ## I criterion -----------------------------------------------------------------
-function I_criterion(X; N = N, K = K, order)
+function I_criterion(X; N = N, K = K, order=2)
     ## first moment matrices, then function eval
     # momen matrices are p x p
     # one factor moments matrix for second order model 3 x 3
@@ -82,15 +81,12 @@ end
 
 
 ## G-criterion -----------------------------------------------------------------
-function G_criterion(X; N = N, K = K, order)
+function G_criterion(X; N = N, K = K, order=2)
    ## function eval
     Xm          = genModelMat_fac(X; N = N, K = K, order = order)
     msize       = size(Xm)
     p           = msize[2]
     XpX         = transpose(Xm)*Xm
-
-    # we need inv(XpX), first block matrices with small determinants
-    determinant = det(XpX)
 
     if K == 1
         Xpred = Xs_onefac
