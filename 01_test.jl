@@ -50,15 +50,16 @@ using Combinatorics
 
 ########################## D-optimal ###############################
 
-K = 1
-N = 3
+K = 3
+N = 16
 d = K * N
 bounds = easyBounds(K)
-nAgents = numAgents(d)
+nAgents = 500
 agents = initializeAgents(nAgents, N, K, bounds)
 C = .8
 F = .7
-nArchive = Int(floor(numAgents(d)/4))
+pArchive = 2.6
+nArchive = Int(floor(nAgents * pArchive))
 archive = initializeAgents(nArchive, N, K, bounds)
 bounds = [[-1, 1] for i in 1:d]
 
@@ -73,10 +74,10 @@ H = d * 2
 mF = [.7 for x in 1:H]
 mC = [.8 for x in 1:H]
 
-out = differentialEvolution(deepcopy(agents), C, F, D_criterion, maxIters = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .05, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
-print(out[1])
+out = differentialEvolution(deepcopy(agents), C, F, G_criterion, maxIters = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+# print(out[1])
 print("\n")
-print(out[2])
+# print(out[2])
 print("\n")
 print(D_criterion(out[1]))
 print("\n")

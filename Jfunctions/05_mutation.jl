@@ -60,7 +60,7 @@ function mutateAgent(;iter, nAgents, agents, agentLength, fVal, cVal, testFunc, 
     return mutVec, fDelMut, fMut
 end
 
-function updateParams(;agents, fCurrent, mut, fMut, fDelMut, sC, sF, fDel, cVal, fVal, nAgents, doArchive = false, archive = nothing, nArch = nothing, method = "rand/1")
+function updateParams(;agents, fCurrent, mut, fMut, fDelMut, sC, sF, fDel, cVal, fVal, nAgents, doArchive = false, archive = nothing, nArch = nothing, pArchive = nothing, method = "rand/1")
     for i in 1:nAgents
         if fDelMut[i] < 0
             if occursin("current_to_pbest", method)
@@ -70,10 +70,11 @@ function updateParams(;agents, fCurrent, mut, fMut, fDelMut, sC, sF, fDel, cVal,
                 if doArchive
                     archive = cat(dims = [3], archive, agents[:,:,i])
                     nArch += 1
-                    if nArch > nAgents
-                        randInds = sample(1:nArch, nAgents, replace = false)
+                    nFloor = Int(floor(nAgents * pArchive))
+                    if nArch > nFloor
+                        randInds = sample(1:nArch, nFloor, replace = false)
                         archive = archive[:,:,randInds]
-                        nArch = deepcopy(nAgents)
+                        nArch = nFloor
                     end
                 end
             end

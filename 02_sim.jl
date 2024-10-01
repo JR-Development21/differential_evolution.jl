@@ -51,7 +51,8 @@ nworkers()
         bounds = easyBounds(K)
         nAgents = agentVec[l]
         agents = initializeAgents(nAgents, N, K, bounds)
-        nArchive = Int(floor(nAgents / 4))
+        pArchive = 2.6
+        nArchive = Int(floor(nAgents * pArchive))
         archive = initializeAgents(nArchive, N, K, bounds)
         bounds = [[-1, 1] for i in 1:d]
         C = [.8 for x in 1:nAgents]
@@ -61,7 +62,7 @@ nworkers()
         mC = [.8 for x in 1:H]
         crit = x -> critVec[k](x; N = N, K = K)
 
-        out = differentialEvolution(deepcopy(agents), C, F, crit, maxIters = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .05, H = H, doArchive = true, archive = archive, nArchive = nArchive, bounds = bounds, boundType = "absorbingWall")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxIters = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 
         if k == 1
             critVal = D_criterion(out[1]; N = N, K = K)
