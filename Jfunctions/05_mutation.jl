@@ -5,7 +5,7 @@ function mutateAgent(;iter, nAgents, agents, agentLength, fVal, cVal, testFunc, 
     lenPop = length(popInd)
     if doArchive
         K,n = size(agents)[[1,2]]
-        pop = Array{Float64}(undef, (K, n ,nArch))
+        pop = Array{Float64}(undef, (K, n ,lenPop))
         for i in 1:lenPop
             if popInd[i] > nAgents
                 pop[:,:,i] = archive[:,:,popInd[i] - nAgents]

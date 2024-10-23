@@ -64,11 +64,11 @@ function updateBest(;method = "random", variant = nothing, p = nothing, nAgents 
     end
 end
 
-function cullHerd(; method = nothing, nAgents = nothing, nMin = nothing, nMax = nothing, maxIter = nothing, iter = nothing, fCurrent = nothing)
+function cullHerd(; method = nothing, nAgents = nothing, nMin = nothing, nMax = nothing, maxFuncEvals = nothing, fEvals = nothing, fCurrent = nothing)
     if ~(method in ["L-SHADE"])
         return 1:nAgents
     elseif method == "L-SHADE"
-        nAgents = Int(ceil((nMin - nMax) / maxIter * iter + nMax))
+        nAgents = Int(round((nMin - nMax) / maxFuncEvals * fEvals + nMax))
         keepAgents = sortperm(fCurrent)[1:nAgents]
         return keepAgents
     end

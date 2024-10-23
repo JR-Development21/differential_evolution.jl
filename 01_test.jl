@@ -70,11 +70,11 @@ bounds = [[-1, 1] for i in 1:d]
 
 C = [.8 for x in 1:nAgents]
 F = [.7 for x in 1:nAgents]
-H = d * 2
-mF = [.7 for x in 1:H]
-mC = [.8 for x in 1:H]
+H = 6
+mF = [.5 for x in 1:H]
+mC = [.5 for x in 1:H]
 
-out = differentialEvolution(deepcopy(agents), C, F, G_criterion, maxIters = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, G_criterion, maxItersPSO = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 # print(out[1])
 print("\n")
 # print(out[2])
@@ -87,4 +87,4 @@ print(A_criterion(out[1]))
 print("\n")
 print(G_criterion(out[1]))
 print("\n")
-print(out[3])
+print(out[4] / nAgents)
