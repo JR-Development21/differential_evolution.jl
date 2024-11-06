@@ -23,7 +23,7 @@ nworkers()
 
 
     # Random.seed!(16)
-    nReps = 2
+    nReps = 140
 
     ## set up  combinatoric runs by factor numAgents
     nVec = vcat(3:9, 6:12, 10:16)
