@@ -23,7 +23,7 @@ nworkers()
 
 
     # Random.seed!(16)
-    nReps = 140
+    nReps = 2
 
     ## set up  combinatoric runs by factor numAgents
     nVec = vcat(3:9, 6:12, 10:16)
@@ -61,8 +61,9 @@ nworkers()
         mF = [.5 for x in 1:H]
         mC = [.5 for x in 1:H]
         crit = x -> critVec[k](x; N = N, K = K)
+        p = .11
 
-        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = p, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 
         if k == 1
             critVal = D_criterion(out[1]; N = N, K = K)

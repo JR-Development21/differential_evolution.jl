@@ -26,9 +26,10 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
             PSOGenerations += 1
             minF = deepcopy(minimum(fCurrent))
             if fTrack > minF
-                if (fTrack - minF) < sqrt(eps(Float64))
-                    converge = true
-                end
+                #uncomment this
+                # if (fTrack - minF) < sqrt(eps(Float64))
+                #     converge = true
+                # end
                 fTrack = minF
                 f_change = 1
             else
