@@ -1,6 +1,5 @@
 cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
 
-print(Dates.format(now(), "HH:MM"))
 using Distributed, Dates
 length(Sys.cpu_info())    # Number of logical CPU cores available in the system
 nprocs()      # Number of available processes.
