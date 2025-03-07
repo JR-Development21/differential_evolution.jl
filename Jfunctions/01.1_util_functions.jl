@@ -183,6 +183,10 @@ function GToBork(val, P)
     100 * P / val
 end
 
+function design2Space(designVec, minVal, maxVal)
+    (designVec .+ 1) ./ 2  .* (maxVal - minVal).+ minVal
+end
+
 # using LinearAlgebra
 
 # test1 = [1;-1;0]
