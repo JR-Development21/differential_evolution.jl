@@ -1,6 +1,6 @@
 using Distributions, LinearAlgebra
 
-cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
+cd("C:\\Users\\A02180741\\Documents\\differential_evolution.jl\\")
 
 functions = readdir("Jfunctions/")
 functions = functions[findall(occursin.(".jl", functions))]
@@ -70,11 +70,11 @@ bounds = [[-1, 1] for i in 1:d]
 
 C = [.8 for x in 1:nAgents]
 F = [.7 for x in 1:nAgents]
-H = 6
+H = 100
 mF = [.5 for x in 1:H]
 mC = [.5 for x in 1:H]
 
-out = differentialEvolution(deepcopy(agents), C, F, D_criterion, maxItersPSO = 1000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, I_criterion, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "SHADE", p = 0.11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 print(out[1])
 # print("\n")
 # print(out[2])

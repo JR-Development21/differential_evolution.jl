@@ -1,4 +1,4 @@
-cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
+cd("C:\\Users\\A02180741\\Documents\\differential_evolution.jl\\")
 
 using Distributed, Dates
 length(Sys.cpu_info())    # Number of logical CPU cores available in the system
@@ -9,6 +9,8 @@ nworkers()
 addprocs(min(length(Sys.cpu_info()) - 1, 30))
 nprocs()
 nworkers()
+
+print(Dates.format(now(), "HH:MM"))
 
 @everywhere using Distributions, LinearAlgebra, Combinatorics, Random, CSV, DataFrames, Distributed
 
@@ -23,7 +25,7 @@ nworkers()
 
 
     # Random.seed!(16)
-    nReps = 2
+    nReps = 100
 
     # create design from Walsh results
     hpoDesign = [1.0 -0.9999999999999996; 7.2761183106552234e-9 -1.5297205054337253e-8; -3.142222040344605e-8 -1.3101472581070075e-8; -1.0 -1.0; -6.145091794900058e-9 -0.9999999999999999; -1.6246069449272817e-8 1.0; 2.2726978421678407e-9 -3.953940820479788e-9; -4.718212683873243e-10 3.169048643833188e-9; -1.0 1.0; 1.0 -5.516752889729785e-9; 0.9999999999999996 1.0; -1.0 6.610875494983516e-10]

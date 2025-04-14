@@ -69,6 +69,12 @@ function updateMemC(;method = "classic", fDel = nothing, mC = nothing, sC = noth
                 mC_new = sum(sC.^2 .* w) / sum(sC .* w)
             end
         end
+        if (isnan(mC_new))
+            println("fDel: ", fDel)
+            println("mC: ", mC)
+            println("sC: ", sC)
+            throw("Frick this dude")
+        end
         return(mC_new)
     end
     throw("Please input a valid method")
@@ -84,6 +90,12 @@ function updateMemF(;method = "classic", fDel = nothing, mF = nothing, sF = noth
         else
             w = fDel ./ sum(fDel)
             mF_new = sum(sF.^2 .* w) / sum(sF .* w)
+        end
+        if (isnan(mF_new))
+            println("fDel: ", fDel)
+            println("mF: ", mF)
+            println("sF: ", sF)
+            throw("Frick this dude")
         end
         return(mF_new)
     end

@@ -11,6 +11,29 @@ function D_optim(mat; order = 2)
     return result
 end
 
+function safe_func(func, A, agentLength, C, F)
+    try
+        return func(A)
+    catch e
+        println("Error computing rank: ", e)
+        println("Matrix size: ", size(A))
+        println("Contains NaN: ", any(isnan, A))
+        println("agentLength: ", agentLength)
+        println("F: ", F)
+        println("C: ", C)
+        println(A)
+        println("Contains Inf: ", any(isinf, A))
+        println("Condition number: ", cond(A))
+        println("Singular values (if computable): ")
+        try
+            println(svdvals(A))
+        catch svd_err
+            println("Failed to compute singular values: ", svd_err)
+        end
+        return missing  # or return a default value
+    end
+end
+
 function I_optim(mat; order = 2)
     size_mat = size(mat)
     if length(size_mat) > 1

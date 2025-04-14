@@ -1,4 +1,5 @@
-cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
+t1 = time()
+cd("C:\\Users\\A02180741\\Documents\\differential_evolution.jl\\")
 
 using Distributed
 length(Sys.cpu_info())    # Number of logical CPU cores available in the system
@@ -6,7 +7,7 @@ nprocs()      # Number of available processes.
 nworkers()
 
 #
-addprocs(min(length(Sys.cpu_info()) - 1, 30))
+addprocs(min(length(Sys.cpu_info()) - 3, 30))
 nprocs()
 nworkers()
 
@@ -23,7 +24,7 @@ nworkers()
 
 
     # Random.seed!(16)
-    nReps = 2
+    nReps = 100
 
     ## set up  combinatoric runs by factor numAgents
     nVec = vcat(3:9, 6:12, 10:16)
@@ -45,13 +46,14 @@ nworkers()
 
 
     function run_optimization(i, j, k, l)
+        println("Combo = ", i, ", nrep = ", j)
         K = kVec[i]
         N = nVec[i]
         d = K * N
         bounds = easyBounds(K)
         nAgents = agentVec[l]
         agents = initializeAgents(nAgents, N, K, bounds)
-        pArchive = 2.6
+        pArchive = 1
         nArchive = Int(floor(nAgents * pArchive))
         archive = initializeAgents(nArchive, N, K, bounds)
         bounds = [[-1, 1] for i in 1:d]
@@ -63,7 +65,7 @@ nworkers()
         crit = x -> critVec[k](x; N = N, K = K)
         p = .11
 
-        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = p, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "SHADE", p = p, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 
         if k == 1
             critVal = D_criterion(out[1]; N = N, K = K)
@@ -114,3 +116,6 @@ CSV.write("G_sim.csv", G_frame)
 
 I_frame = DataFrame(hcat(IVec, IDesign), ["testRun","k","N","niter","Sv","fgbest","gbest"])
 CSV.write("I_sim.csv", I_frame)
+
+elapsed_time = time() - t1
+println("Elapsed time: ", elapsed_time, " seconds")
