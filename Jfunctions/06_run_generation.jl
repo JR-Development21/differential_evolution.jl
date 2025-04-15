@@ -13,7 +13,7 @@ function runGeneration(;k, agents, C, F, mF, mC, nAgents, agentLength, testFunc,
         mut[:,:,i], fDelMut[i], fMut[i] = mutateAgent(;iter = i, nAgents=nAgents, agents=agents, agentLength = agentLength, testFunc = testFunc, fCurrent = fCurrent[i], fVal = F, cVal = C, method = method, variant = variant, doArchive=doArchive, archive = archive, nArch=nArchive, best = best, boundType=boundType, bounds = bounds)
     end
     sC, sF, fDel, archive, nArchive, agents, fCurrent = updateParams(;mut = mut, fCurrent = fCurrent, fDelMut = fDelMut, fMut = fMut, nAgents=nAgents, agents=agents, fVal = F, cVal = C, method = method, doArchive=doArchive, archive = archive, nArch=nArchive, pArchive = pArchive, sC = sC, sF = sF, fDel = fDel)
-    if variant in ["L-SHADE", "SHADE"]
+    if variant in ["L-SHADE", "SHADE", "My-SHADE"]
         mC[k] = updateMemC(method = variant, fDel = fDel, mC = mC, sC = sC, k = k, terminalValue = terminalValue)
         mF[k] = updateMemF(method = variant, fDel = fDel, mF = mF, sF = sF, k = k)
     end

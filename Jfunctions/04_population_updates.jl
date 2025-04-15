@@ -22,7 +22,7 @@ function sampPop(;iter, nAgents, method = "rand/1", variant = "classic", best=no
                 r2_ind = sample(setdiff(1:nAgents, [iter, r1_ind]), samp_number, replace = false)
             end
             pop_ind = vcat(pop_ind, pbest_ind, pop_ind, r1_ind, r2_ind)
-        elseif variant == "SHADE"
+        elseif (variant == "SHADE") || (variant == "My-SHADE")
             pop_ind = iter
             pbest_indices = setdiff(best[iter], iter)
             if length(pbest_indices) > 1
@@ -47,11 +47,15 @@ function updateBest(;method = "random", variant = nothing, p = nothing, nAgents 
         return nothing
     elseif occursin("current_to_pbest", method)
         order = sortperm(fCurrent)
-        if variant == "SHADE"
+        if (variant == "SHADE") || (variant == "My-SHADE")
             p = Array{Int}(undef, nAgents)
             pbest_ind = Array{Array{Int}}(undef, nAgents)
             for i in 1:nAgents
-                p[i] = Int(round(rand(Uniform(2/nAgents, .2)) * nAgents))
+                if nAgents > 10
+                    p[i] = Int(round(rand(Uniform(2/nAgents, .2)) * nAgents))
+                else
+                    p[i] = Int(2)
+                end
                 pbest_ind[i] = order[1:p[i]]
             end
         elseif variant == "L-SHADE"
@@ -65,9 +69,9 @@ function updateBest(;method = "random", variant = nothing, p = nothing, nAgents 
 end
 
 function cullHerd(; method = nothing, nAgents = nothing, nMin = nothing, nMax = nothing, maxFuncEvals = nothing, fEvals = nothing, fCurrent = nothing)
-    if ~(method in ["L-SHADE"])
+    if ~(method in ["L-SHADE", "My-SHADE"])
         return 1:nAgents
-    elseif method == "L-SHADE"
+    elseif (method == "L-SHADE") || (method == "My-SHADE")
         nAgents = Int(round((nMin - nMax) / maxFuncEvals * fEvals + nMax))
         keepAgents = sortperm(fCurrent)[1:nAgents]
         return keepAgents

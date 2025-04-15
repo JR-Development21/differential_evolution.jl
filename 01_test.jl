@@ -1,6 +1,6 @@
 using Distributions, LinearAlgebra
 
-cd("C:\\Users\\A02180741\\Documents\\differential_evolution.jl\\")
+cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
 
 functions = readdir("Jfunctions/")
 functions = functions[findall(occursin.(".jl", functions))]
@@ -58,7 +58,7 @@ nAgents = 500
 agents = initializeAgents(nAgents, N, K, bounds)
 C = .8
 F = .7
-pArchive = 2.6
+pArchive = 1
 nArchive = Int(floor(nAgents * pArchive))
 archive = initializeAgents(nArchive, N, K, bounds)
 bounds = [[-1, 1] for i in 1:d]
@@ -70,11 +70,11 @@ bounds = [[-1, 1] for i in 1:d]
 
 C = [.8 for x in 1:nAgents]
 F = [.7 for x in 1:nAgents]
-H = 100
+H = 6
 mF = [.5 for x in 1:H]
 mC = [.5 for x in 1:H]
 
-out = differentialEvolution(deepcopy(agents), C, F, I_criterion, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "SHADE", p = 0.11, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, G_criterion, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "My-SHADE", p = .11, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 print(out[1])
 # print("\n")
 # print(out[2])

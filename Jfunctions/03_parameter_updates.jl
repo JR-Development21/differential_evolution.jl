@@ -4,7 +4,7 @@ function changeC(;C=nothing, method = "classic", H=nothing, popSize = nothing, m
     if method == "classic"
         return C
     end
-    if (method == "L-SHADE") || (method == "SHADE")
+    if (method == "L-SHADE") || (method == "SHADE") || (method == "My-SHADE")
         r_i = rand(1:H, popSize)
         cVals = Array{Float64}(undef, popSize)
         for i in 1:popSize
@@ -29,7 +29,7 @@ function changeF(;F=nothing, method = "classic", H=nothing, popSize = nothing, m
     if method == "classic"
         return F
     end
-    if (method == "L-SHADE") || (method == "SHADE")
+    if (method == "L-SHADE") || (method == "SHADE") || (method == "My-SHADE")
         r_i = rand(1:H, popSize)
         fVals = Array{Float64}(undef, popSize)
         for i in 1:popSize
@@ -49,7 +49,7 @@ function updateMemC(;method = "classic", fDel = nothing, mC = nothing, sC = noth
     if method == "classic"
         return 0
     end
-    if (method == "SHADE")
+    if (method == "SHADE") || (method == "My-SHADE")
         if length(sC) == 0
             mC_new = mC[k]
         else
@@ -84,7 +84,7 @@ function updateMemF(;method = "classic", fDel = nothing, mF = nothing, sF = noth
     if method == "classic"
         return 0
     end
-    if (method == "L-SHADE") || (method == "SHADE")
+    if (method == "L-SHADE") || (method == "SHADE") || (method == "My-SHADE")
         if length(sF) == 0
             mF_new = mF[k]
         else
