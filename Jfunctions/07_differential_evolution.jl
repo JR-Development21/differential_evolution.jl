@@ -20,6 +20,7 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
     PSOGenerations = 1
     converge = false
     while (fEvals < maxFuncEvals) & ~converge
+        # print(maxFuncEvals)
         fEvals += nAgents
         F, C, mC, mF, k, agents, nAgents, fCurrent, best = runGeneration(;k = k, agents = agents, C = C, F = F, mF = mF, mC = mC, nAgents = nAgents, agentLength = agentLength, testFunc = testFunc, fCurrent = fCurrent, nMin = nMin, nMax = nMax, H = H, doArchive = doArchive, archive = archive, nArchive = nArchive, pArchive = pArchive, method = method, variant = variant, bounds = bounds, boundType = boundType, best = best, p = p, terminalValue = terminalValue, fEvals = fEvals, maxFuncEvals = maxFuncEvals)
         if floor(fEvals / nMax) >= PSOGenerations
@@ -27,11 +28,13 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
             minF = deepcopy(minimum(fCurrent))
             if fTrack > minF
                 #uncomment this
-                # if (fTrack - minF) < sqrt(eps(Float64))
-                #     converge = true
-                # end
-                fTrack = minF
-                f_change = 1
+                if (fTrack - minF) < sqrt(eps(Float64))
+                    f_change += 1
+                else
+                    fTrack = minF
+                    f_change = 1
+                end
+                
             else
                 f_change += 1
             end

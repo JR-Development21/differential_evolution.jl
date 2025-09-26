@@ -118,6 +118,16 @@ function G_optim(mat; order = 2)
     return result
 end
 
+function maxMinOptim(mat)
+    D = pairwise(Euclidean(), mat, dims=1)
+    for i in axes(D, 1)
+        D[i,i] = Inf
+    end
+
+    result = -minimum(D)
+    return result
+end
+
 function genW(K)
     if K == 1
         M = 2 .* [1 0 1/3;
