@@ -50,8 +50,8 @@ using Combinatorics
 
 ########################## D-optimal ###############################
 
-K = 2
-N = 20
+K = 5
+N = 21
 d = K * N
 bounds = easyBounds(K)
 nAgents = 500
@@ -75,7 +75,7 @@ mF = [.5 for x in 1:H]
 mC = [.5 for x in 1:H]
 
 @time begin
-out = differentialEvolution(deepcopy(agents), C, F, maxMinOptim, maxItersPSO = 1500, convergeIters = 1500, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, I_criterion, maxItersPSO = 1500, convergeIters = 1500, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 end
 
 print(out[1])

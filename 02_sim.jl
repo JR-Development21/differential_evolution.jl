@@ -1,5 +1,5 @@
 t1 = time()
-cd("C:\\Users\\A02180741\\Documents\\differential_evolution.jl\\")
+cd("\\Users\\ritch\\Documents\\DOE Papers\\differential_evolution.jl")
 
 using Distributed
 length(Sys.cpu_info())    # Number of logical CPU cores available in the system
@@ -23,12 +23,11 @@ nworkers()
     end
 
 
-    # Random.seed!(16)
-    nReps = 140
+    nReps = 100
 
     ## set up  combinatoric runs by factor numAgents
-    nVec = vcat(3:9, 6:12, 10:16)
-    kVec = repeat(1:3, inner = 7)
+    nVec = vcat(3:9, 6:12, 10:16, [15, 17, 20, 24], [21, 23, 26, 30])
+    kVec = vcat(repeat(1:3, inner = 7), repeat(4:5, inner = 4))
     agentVec = [50, 150, 500]
     nRuns = length(kVec)
     nSize = length(agentVec)
@@ -46,6 +45,8 @@ nworkers()
 
 
     function run_optimization(i, j, k, l)
+        run_id = (((i - 1) * nReps + (j - 1)) * 4 + (k - 1)) * nSize + l
+        Random.seed!(16 + run_id)
         println("Combo = ", i, ", nrep = ", j)
         K = kVec[i]
         N = nVec[i]
@@ -53,7 +54,7 @@ nworkers()
         bounds = easyBounds(K)
         nAgents = agentVec[l]
         agents = initializeAgents(nAgents, N, K, bounds)
-        pArchive = 1
+        pArchive = 2.6
         nArchive = Int(floor(nAgents * pArchive))
         archive = initializeAgents(nArchive, N, K, bounds)
         bounds = [[-1, 1] for i in 1:d]
@@ -65,7 +66,7 @@ nworkers()
         crit = x -> critVec[k](x; N = N, K = K)
         p = .11
 
-        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 5000, convergeIters = 100, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "SHADE", p = p, H = H, doArchive = true, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 1000, convergeIters = 1000, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = p, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "L-SHADE")
 
         if k == 1
             critVal = D_criterion(out[1]; N = N, K = K)

@@ -56,7 +56,6 @@ function I_criterion(X; N = N, K = K, order=2)
     #k = size(X)[2]
     V = 2^K
     # we need inv(XpX), first block matrices with small determinants
-    determinant = det(XpX)
 
     if K == 1
         W = W1
@@ -66,6 +65,8 @@ function I_criterion(X; N = N, K = K, order=2)
         W =  W3
     elseif K == 4
         W = W4
+    elseif K == 5
+        W = W5
     end
 
     if rank(XpX) < p
