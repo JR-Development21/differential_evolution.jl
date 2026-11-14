@@ -68,13 +68,16 @@ file_to_id <- function(file_path){
     return("Augmented L-SHADE")
   }
   if (grepl("normal", file_path)){
-    return("Adjusted")
+    return("Early Stopping Augmented L-SHADE")
   }
   if (grepl("arch", file_path)){
-    return("Archive")
+    return("Archive Only")
+  }
+  if (grepl("bounds", file_path)){
+    return("Boundary Only")
   }
   if (grepl("exact", file_path)){
-    return("Traditional")
+    return("Archive and Boundary")
   }
   if (grepl("full", file_path)){
     return("PSO")
@@ -192,7 +195,7 @@ make_95_plots <- function(criterion_file_lists){
 }
 
 # file_list <- c("L-SHADE-pure/I_sim.csv",
-#                "L-SHADE-normal/I_sim.csv",
+#                "L-SHADE-bounds/I_sim.csv",
 #                "L-SHADE-exact/I_sim.csv",
 #                "L-SHADE-arch/I_sim.csv")
 # 
@@ -201,7 +204,7 @@ make_95_plots <- function(criterion_file_lists){
 # 
 # 
 # file_list <- c("L-SHADE-pure/A_sim.csv",
-#                "L-SHADE-normal/A_sim.csv",
+#                "L-SHADE-bounds/A_sim.csv",
 #                "L-SHADE-exact/A_sim.csv",
 #                "L-SHADE-arch/A_sim.csv")
 # 
@@ -209,7 +212,7 @@ make_95_plots <- function(criterion_file_lists){
 # ggsave("Plots/a_crit_lshade.pdf", height = 6, width = 8, units = "in")
 # 
 # file_list <- c("L-SHADE-pure/G_sim.csv",
-#                "L-SHADE-normal/G_sim.csv",
+#                "L-SHADE-bounds/G_sim.csv",
 #                "L-SHADE-exact/G_sim.csv",
 #                "L-SHADE-arch/G_sim.csv")
 # 
@@ -217,12 +220,44 @@ make_95_plots <- function(criterion_file_lists){
 # ggsave("Plots/g_crit_lshade.pdf", height = 6, width = 8, units = "in")
 # 
 # file_list <- c("L-SHADE-pure/D_sim.csv",
-#                "L-SHADE-normal/D_sim.csv",
+#                "L-SHADE-bounds/D_sim.csv",
 #                "L-SHADE-exact/D_sim.csv",
 #                "L-SHADE-arch/D_sim.csv")
 # 
 # (box_out <- make_raw_plots(file_list, "D-Criterion L-SHADE Comparison"))
 # ggsave("Plots/d_crit_lshade.pdf", height = 6, width = 8, units = "in")
+
+################### stopping criteria
+
+file_list <- c("L-SHADE-pure/I_sim.csv",
+               "L-SHADE-normal/I_sim.csv")
+
+(box_out <- make_raw_plots(file_list, "I-Criterion L-SHADE Comparison"))
+ggsave("Plots/i_crit_stop.pdf", height = 6, width = 8, units = "in")
+
+
+file_list <- c("L-SHADE-pure/A_sim.csv",
+               "L-SHADE-normal/A_sim.csv")
+
+(box_out <- make_raw_plots(file_list, "A-Criterion L-SHADE Comparison"))
+ggsave("Plots/a_crit_stop.pdf", height = 6, width = 8, units = "in")
+
+file_list <- c("L-SHADE-pure/G_sim.csv",
+               "L-SHADE-normal/G_sim.csv")
+
+(box_out <- make_raw_plots(file_list, "G-Criterion L-SHADE Comparison"))
+ggsave("Plots/g_crit_stop.pdf", height = 6, width = 8, units = "in")
+
+file_list <- c("L-SHADE-pure/D_sim.csv",
+               "L-SHADE-normal/D_sim.csv")
+
+(box_out <- make_raw_plots(file_list, "D-Criterion L-SHADE Comparison"))
+ggsave("Plots/d_crit_stop.pdf", height = 6, width = 8, units = "in")
+
+
+# legend <- as_ggplot(get_legend(box_out))
+# 
+# ggsave("Plots/legend_stop.pdf", legend, height = .5, width = 9, units = "in")
 
 
 ########## include pso
@@ -294,6 +329,3 @@ ggsave("Plots/criteria_95.pdf", plot = line_out, height = 6, width = 9, units = 
 
 
 
-# legend <- as_ggplot(get_legend(box_out))
-# 
-# ggsave("Plots/legend.pdf", legend, height = .5, width = 3, units = "in")

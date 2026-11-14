@@ -1,4 +1,4 @@
-using Distributions, LinearAlgebra, Distances, Plots
+using Distributions, LinearAlgebra, Distances, Plots, CSV, DataFrames
 
 cd("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/")
 
@@ -51,7 +51,7 @@ using Combinatorics
 ########################## D-optimal ###############################
 
 K = 5
-N = 21
+N = 30
 d = K * N
 bounds = easyBounds(K)
 nAgents = 500
@@ -75,8 +75,10 @@ mF = [.5 for x in 1:H]
 mC = [.5 for x in 1:H]
 
 @time begin
-out = differentialEvolution(deepcopy(agents), C, F, I_criterion, maxItersPSO = 1500, convergeIters = 1500, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
+out = differentialEvolution(deepcopy(agents), C, F, G_criterion, maxItersPSO = 1000, convergeIters = 1000, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = .11, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall", trackF = true)
 end
+
+CSV.write("C:/Users/ritch/Documents/DOE Papers/differential_evolution.jl/converge_runs/converge_de.csv", DataFrame(fTrack_vec = out[5], iter = 1:length(out[5])))
 
 print(out[1])
 print("\n")

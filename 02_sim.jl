@@ -66,7 +66,7 @@ nworkers()
         crit = x -> critVec[k](x; N = N, K = K)
         p = .11
 
-        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 1000, convergeIters = 1000, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = p, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "L-SHADE")
+        out = differentialEvolution(deepcopy(agents), C, F, crit, maxItersPSO = 1000, convergeIters = 1000, mF = mF, mC = mC, method = "current_to_pbest/1", variant = "L-SHADE", p = p, H = H, doArchive = false, archive = archive, nArchive = nArchive, pArchive = pArchive, bounds = bounds, boundType = "absorbingWall")
 
         if k == 1
             critVal = D_criterion(out[1]; N = N, K = K)

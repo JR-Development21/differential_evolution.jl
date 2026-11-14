@@ -1,6 +1,6 @@
 ############### Function to run differential evolution ##################
 
-function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothing, nMin = 4, maxItersPSO = 500, convergeIters = 15, H = nothing, doArchive = false, archive = nothing, nArchive = nothing, pArchive = nothing, method = "rand/1", variant = "classic", bounds = nothing, boundType = nothing, p = nothing)
+function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothing, nMin = 4, maxItersPSO = 500, convergeIters = 15, H = nothing, doArchive = false, archive = nothing, nArchive = nothing, pArchive = nothing, method = "rand/1", variant = "classic", bounds = nothing, boundType = nothing, p = nothing, trackF=false)
     terminalValue = -1
     nAgents = size(agents)[3]
     maxFuncEvals = maxItersPSO * nAgents
@@ -13,6 +13,9 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
     best = updateBest(method = method, variant = variant, p = p, nAgents = nAgents, fCurrent = fCurrent)
     k = 1
     fTrack = deepcopy(minimum(fCurrent))
+    if trackF
+        fTrack_vec = [deepcopy(fTrack)]
+    end
     f_change = 1
     itersUsed = 0
     i = 0
@@ -26,6 +29,9 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
         if floor(fEvals / nMax) >= PSOGenerations
             PSOGenerations += 1
             minF = deepcopy(minimum(fCurrent))
+            if trackF
+                push!(fTrack_vec, deepcopy(minF))
+            end
             if fTrack > minF
                 #uncomment this
                 if (fTrack - minF) < sqrt(eps(Float64))
@@ -46,5 +52,8 @@ function differentialEvolution(agents, C, F,  testFunc; mF = nothing, mC = nothi
         itersUsed = deepcopy(i)
     end
     bestInd = argmin(fCurrent)
+    if trackF
+        return agents[:,:,bestInd], fCurrent[bestInd], itersUsed, fEvals, fTrack_vec
+    end
     return agents[:,:,bestInd], fCurrent[bestInd], itersUsed, fEvals
 end
